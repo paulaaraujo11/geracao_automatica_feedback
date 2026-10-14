@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
-INPUT_PATH = "turma-feedback.csv"
+INPUT_PATH = "turma-feedback-original.csv"
 OUTPUT_PATH = "turma_feedback_parsed.csv"
 MAPPING_PATH = "turma_feedback_mapping_CONFIDENCIAL.csv"
 
@@ -163,6 +163,36 @@ def parse_feedback_block(feedback_html):
     return out
 
 
+ROTULOS_SEM_CONTEUDO = {
+    "NAO_RESPONDIDA": "Não respondida",
+    "SEM_FEEDBACK_PROFESSOR": "Sem feedback do professor",
+    "VAZIO": "",
+}
+
+
+def montar_feedback_completo(itens):
+    """Junta todos os itens de uma questao (acertos, parciais, erros...) em um texto unico."""
+    linhas = []
+    categoria_atual = None
+    for item in itens:
+        cat = item["categoria"]
+        if cat in ROTULOS_SEM_CONTEUDO:
+            if ROTULOS_SEM_CONTEUDO[cat]:
+                linhas.append(ROTULOS_SEM_CONTEUDO[cat])
+            continue
+        if cat in ("TEXTO_LIVRE", "OUTRO"):
+            if item["explicacao"]:
+                linhas.append(item["explicacao"])
+            continue
+        if cat != categoria_atual:
+            linhas.append(f"{cat}:")
+            categoria_atual = cat
+        partes = [p for p in (item["trecho"], item["explicacao"]) if p]
+        if partes:
+            linhas.append("- " + " -> ".join(partes))
+    return "\n".join(linhas) or None
+
+
 def split_questions(html_after_intro):
     """Divide o corpo (apos remover intro) em blocos por marcador Q<n>."""
     parts = Q_MARKER_RE.split(html_after_intro)
@@ -215,6 +245,7 @@ def parse_row(row, idx, id_cache):
         out_rows.append({
             **base, "num_questao": None, "pergunta": None, "resposta_aluno": None,
             "categoria_feedback": "SEM_QUESTOES", "trecho": None, "explicacao": texto or None,
+            "feedback_completo": texto or None,
         })
         return out_rows
 
@@ -229,6 +260,7 @@ def parse_row(row, idx, id_cache):
 
         feedback_html = TRAILING_SIGNOFF_RE.sub("", feedback_html)
         itens = parse_feedback_block(feedback_html)
+        feedback_completo = montar_feedback_completo(itens)
         for item in itens:
             out_rows.append({
                 **base,
@@ -238,6 +270,7 @@ def parse_row(row, idx, id_cache):
                 "categoria_feedback": item["categoria"],
                 "trecho": item["trecho"],
                 "explicacao": item["explicacao"],
+                "feedback_completo": feedback_completo,
             })
     return out_rows
 
@@ -253,6 +286,7 @@ def main():
         "id_atividade", "disciplina", "secao", "tipo", "aluno_id", "data_resposta",
         "email_enviado", "nota_atividade", "data_entrega", "data_disponibilizacao",
         "num_questao", "pergunta", "resposta_aluno", "categoria_feedback", "trecho", "explicacao",
+        "feedback_completo",
     ]
     with open(OUTPUT_PATH, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)

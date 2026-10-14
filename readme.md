@@ -239,6 +239,7 @@ O dataset processado (`turma_feedback_parsed.csv`) em formato **long** apresenta
 | `categoria_feedback` | String | Classificação: ACERTOS / ACERTOS_PARCIAIS / ERROS / NAO_RESPONDIDA / TEXTO_LIVRE / SEM_FEEDBACK / VAZIO | 1:N |
 | `trecho` | String | Subtema ou item específico avaliado (até 200 caracteres) | 1:1 |
 | `explicacao` | String | Justificativa do feedback para o trecho (até 2000 caracteres) | 1:1 |
+| `feedback_completo` | String | Feedback inteiro da questão (todas as categorias: acertos, acertos parciais, erros, com trecho -> explicação), repetido em cada linha da questão | N:1 |
 
 ### 8.2 Tabela Estrutura Esperada da Fase 2 (Integração com LLM)
 

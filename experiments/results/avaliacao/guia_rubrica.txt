@@ -1,0 +1,17 @@
+GUIA DA RUBRICA
+
+Avalie cada feedback considerando a pergunta e a resposta do aluno.
+Voce nao sabe qual sistema gerou cada feedback. Avalie cada um isoladamente.
+
+correcao: 1-5: sem erros conceituais ou alucinacoes (5 = totalmente correto)
+clareza: 1-5: facil de entender para o aluno
+especificidade: 1-5: cita/aponta elementos concretos da resposta do aluno
+utilidade: 1-5: ajuda o aluno a melhorar
+feed_up: 0/1: explicita o objetivo / o que se esperava
+feed_back: 0/1: diz como o aluno foi (acertos/erros)
+feed_forward: 0/1: indica proximos passos
+nivel_predominante: T=tarefa, P=processo, R=autorregulacao, S=pessoal
+autoavaliacao: 0/1: estimula o aluno a se autoavaliar (Nicol P2)
+fechar_lacuna: 0/1: mostra como fechar a lacuna (Nicol P6)
+autoria_percebida: O=original da tutoria, N=novo (gerado no experimento)
+comentario: texto livre (opcional)

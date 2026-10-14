@@ -1,0 +1,12 @@
+pandas
+beautifulsoup4
+lxml
+matplotlib
+seaborn
+scipy
+openai
+rouge-score
+krippendorff
+# Opcional (BERTScore no passo 4; instala o PyTorch, ~2 GB). Sem ele o passo 4 so pula essa metrica.
+# No Python da Microsoft Store exige "long paths" habilitado no Windows:
+#   pip install bert-score

@@ -1,0 +1,9 @@
+Disciplina: {disciplina}
+Pergunta: {pergunta}
+Resposta do aluno: {resposta_aluno}
+Conceito principal da resposta do aluno: {conceito_aluno}
+Resposta de referência: {resposta_referencia}
+Conceito principal da referência: {conceito_referencia}
+Nota máxima: {nota_maxima}
+
+Avalie a resposta do aluno seguindo as instruções.
